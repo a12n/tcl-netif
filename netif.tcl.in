@@ -1,4 +1,4 @@
-package provide netif 0.0.1
+package provide netif <<VSN>>
 
 proc _ssplit {str sep} {
     return [split [string map [list $sep \uFFFF] $str] \uFFFF]

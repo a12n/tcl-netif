@@ -1,4 +1,4 @@
-proc netif {{ifnam {}}} {
+proc netif {{name {}}} {
     proc parse {ifstr} {
         set pattern {^(\S+).*inet addr:\s*(\S+)}
         if {[regexp $pattern $ifstr _ ifnam ifaddr]} {
@@ -10,10 +10,10 @@ proc netif {{ifnam {}}} {
     proc ssplit {str sep} {
         return [split [string map [list $sep \uFFFF] $str] \uFFFF]
     }
-    if {$ifnam eq {}} {
+    if {$name eq {}} {
         set ifconfig [exec /sbin/ifconfig]
     } else {
-        set ifconfig [exec /sbin/ifconfig $ifnam]
+        set ifconfig [exec /sbin/ifconfig $name]
     }
     set ifstrs [ssplit $ifconfig \n\n]
     return [lmap ifstr $ifstrs {parse $ifstr}]

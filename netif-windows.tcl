@@ -1,7 +1,7 @@
 proc netif {{name {}}} {
     set ipconfig [exec ipconfig /all]
     set ifnam_pat {^([^:]*(?:Ethernet|PPP)[^:]*):?$}
-    set ifaddr_pat {^\s*(?:IPv4|IP)[ -].*:\s*(\S+)}
+    set ifaddr_pat {^\s*(?:IPv4|IP)[ -].*:\s*([\d\.]+)}
     set ans {}
     foreach line [split $ipconfig \n] {
         if {[regexp -line $ifnam_pat $line _ ifnam]} {

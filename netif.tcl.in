@@ -3,3 +3,4 @@ package provide netif <<VSN>>
 set os [string tolower [lindex $tcl_platform(os) 0]]
 set dir [file dirname [info script]]
 source [file join $dir netif-$os.tcl]
+unset dir os

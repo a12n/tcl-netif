@@ -7,11 +7,14 @@ proc netif {{ifnam {}}} {
             error {Device has no address}
         }
     }
+    proc ssplit {str sep} {
+        return [split [string map [list $sep \uFFFF] $str] \uFFFF]
+    }
     if {$ifnam eq {}} {
         set ifconfig [exec /sbin/ifconfig]
     } else {
         set ifconfig [exec /sbin/ifconfig $ifnam]
     }
-    set ifstrs [_ssplit $ifconfig \n\n]
+    set ifstrs [ssplit $ifconfig \n\n]
     return [lmap ifstr $ifstrs {parse $ifstr}]
 }

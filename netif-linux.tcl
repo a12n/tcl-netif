@@ -1,20 +1,17 @@
-proc netif {{name {}}} {
-    proc parse {ifstr} {
+proc netif {} {
+    proc ssplit {str sep} {
+        return [split [string map [list $sep \uFFFF] $str] \uFFFF]
+    }
+    set ifconfig [exec /sbin/ifconfig]
+    set ifstrs [ssplit $ifconfig \n\n]
+    set ans [dict create]
+    foreach ifstr $ifstrs {
         set pattern {^(\S+).*inet addr:\s*(\S+)}
         if {[regexp $pattern $ifstr _ ifnam ifaddr]} {
-            return [list $ifnam $ifaddr]
+            dict set ans $ifnam $ifaddr
         } else {
             error {Device has no address}
         }
     }
-    proc ssplit {str sep} {
-        return [split [string map [list $sep \uFFFF] $str] \uFFFF]
-    }
-    if {$name eq {}} {
-        set ifconfig [exec /sbin/ifconfig]
-    } else {
-        set ifconfig [exec /sbin/ifconfig $name]
-    }
-    set ifstrs [ssplit $ifconfig \n\n]
-    return [lmap ifstr $ifstrs {parse $ifstr}]
+    return $ans
 }

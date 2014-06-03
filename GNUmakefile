@@ -1,12 +1,10 @@
 VSN = $(shell cat vsn)
-MAJOR = $(word 1,$(subst ., ,$(VSN)))
-MINOR = $(word 2,$(subst ., ,$(VSN)))
 
 GEN_SCRIPTS = netif.tcl pkgIndex.tcl
 SCRIPTS = $(GEN_SCRIPTS) $(wildcard netif-*.tcl)
 
 DESTDIR ?= /usr/local/share/tcltk
-PREFIX = $(DESTDIR)/netif$(MAJOR).$(MINOR)
+PREFIX = $(DESTDIR)/netif$(VSN)
 
 .PHONY: all clean install
 .SUFFIXES: .tcl .tcl.in

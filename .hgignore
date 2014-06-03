@@ -1,2 +1,2 @@
-netif.tcl
-pkgIndex.tcl
+^netif.tcl$
+^pkgIndex.tcl$

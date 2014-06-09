@@ -4,14 +4,17 @@ proc netif {} {
     set ifnam_pat {.*\"([^\"]+)\"$}
     set ifaddr_pat {^\s+(?:IPv4|IP)[ -].*:?\s+([\d\.]+)$}
     set ans [dict create]
-    foreach line [split $netsh \n] {
-        if {[regexp -line $ifnam_pat $line _ ifnam]} {
-            # ok
-        } elseif {[regexp -line $ifaddr_pat $line _ ifaddr]} {
-            if {[info exists ifnam]} {
-                dict set ans $ifnam $ifaddr
-                unset ifaddr ifnam
+    foreach ifstr [_ssplit $netsh \n\n] {
+        foreach line [split $ifstr \n] {
+            if {[regexp -line $ifnam_pat $line _ ifnam]} {
+                # ok
+            } elseif {[regexp -line $ifaddr_pat $line _ ifaddr]} {
+                lappend ifaddrs $ifaddr
             }
+        }
+        if {[info exists ifnam] && [info exists ifaddrs]} {
+            dict set ans $ifnam $ifaddrs
+            unset ifnam ifaddrs
         }
     }
     # Remove non-connected interfaces

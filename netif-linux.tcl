@@ -1,9 +1,6 @@
 proc netif {} {
-    proc ssplit {str sep} {
-        return [split [string map [list $sep \uFFFF] $str] \uFFFF]
-    }
     set ifconfig [exec /sbin/ifconfig]
-    set ifstrs [ssplit $ifconfig \n\n]
+    set ifstrs [_ssplit $ifconfig \n\n]
     set ans [dict create]
     foreach ifstr $ifstrs {
         set pattern {^(\S+).*inet addr:\s*(\S+)}

@@ -1,3 +1,4 @@
+# TODO: Aliases?
 proc netif {} {
     set netsh [exec netsh interface ipv4 show addresses]
     set ifnam_pat {.*\"([^\"]+)\"$}

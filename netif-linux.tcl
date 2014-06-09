@@ -1,3 +1,4 @@
+# TODO: Aliases?
 proc netif {} {
     set ifconfig [exec /sbin/ifconfig]
     set ifstrs [_ssplit $ifconfig \n\n]

@@ -12,16 +12,18 @@ proc netif {} {
             }
         }
         if {[info exists ifnam] && [info exists ifaddrs]} {
-            dict set ans $ifnam $ifaddrs
+            dict set ans $ifnam addrs $ifaddrs
             unset ifnam ifaddrs
         }
     }
-    # Remove non-connected interfaces
+    # Remove non-connected interfaces, get MTU
     set netsh [exec netsh interface ipv4 show interface]
-    set state_pat {^\s*\d+\s+\d+\s+\d+\s+(\S+)\s+(.+)$}
+    set pattern {^\s*\d+\s+\d+\s+(\d+)\s+(\S+)\s+(.+)$}
     foreach line [split $netsh \n] {
-        if {[regexp -line $state_pat $line _ state ifnam]} {
-            if {$state ne {connected}} {
+        if {[regexp -line $pattern $line _ mtu state ifnam]} {
+            if {$state eq {connected}} {
+                set ans [dict set ans $ifnam mtu $mtu]
+            } else {
                 set ans [dict remove $ans $ifnam]
             }
         }

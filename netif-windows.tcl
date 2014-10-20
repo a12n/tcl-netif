@@ -12,8 +12,18 @@ proc netif {} {
             }
         }
         if {[info exists ifnam] && [info exists ifaddrs]} {
-            dict set ans $ifnam $ifaddrs
+            dict set ans $ifnam addrs $ifaddrs
             unset ifnam ifaddrs
+        }
+    }
+    # Get MTU and RX/TX counters
+    set netsh [exec netsh interface ipv4 show subinterfaces]
+    set pattern {^\s*(\d+)\s+\d+\s+(\d+)\s+(\d+)\s+(.+)$}
+    foreach line [split $netsh \n] {
+        if {[regexp -line $pattern $line _ mtu rx tx ifnam]} {
+            dict set and $ifnam mtu $mtu
+            dict set ans $ifnam rx $rx
+            dict set ans $ifnam tx $tx
         }
     }
     # Remove non-connected interfaces
